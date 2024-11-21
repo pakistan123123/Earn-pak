@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Referral Platform</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #28a745;
+            color: #fff;
+            text-align: center;
+            overflow-x: hidden;
+        }
+
+        header {
+            background: #fff;
+            color: #28a745;
+            padding: 20px;
+        }
+
+        h1, h2 {
+            font-size: 2rem;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 50px auto;
+            background: #fff;
+            color: #333;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            font-size: 1rem;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #218838;
+        }
+
+        .link a {
+            color: #28a745;
+            text-decoration: none;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .home-container {
+            padding: 40px;
+            background: #fff;
+            color: #333;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-top: 50px;
+            border-radius: 10px;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        /* Bottom Bar Styles */
+        #bottom-bar {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #fff;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 10px 0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            display: none; /* Hide by default */
+        }
+
+        .bottom-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 15px;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 5px;
+            width: 80px;
+            transition: background 0.3s ease;
+        }
+
+        .bottom-btn:hover {
+            background: #218838;
+        }
+
+        /* Floating Action Button */
+        .fab {
+            position: fixed;
+            right: 20px;
+            bottom: 80px;
+            background-color: #28a745;
+            color: white;
+            font-size: 24px;
+            padding: 15px;
+            border-radius: 50%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .fab:hover {
+            transform: scale(1.1);
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 120px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 5px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%; /* Position above */
+            left: 50%;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Hidden Section Styles */
+        .section {
+            display: none;
+        }
+
+        /* Forgot Password Styles */
+        #forgot-password-container {
+            display: none;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1>EarnEasy</h1>
+    </header>
+
+    <!-- Login Form -->
+    <div class="container" id="login-container">
+        <h2>Login</h2>
+        <form id="login-form" onsubmit="login(event)">
+            <input type="email" class="input-field" placeholder="Email" required>
+            <input type="password" class="input-field" placeholder="Password" required>
+            <button type="submit" class="btn">Login</button>
+        </form>
+        <div class="link">
+            <a href="javascript:void(0);" onclick="showRegistration()">Don't have an account? Register here</a>
+            <br>
+            <a href="javascript:void(0);" onclick="showForgotPassword()">Forgot your password?</a>
+        </div>
+    </div>
+
+    <!-- Forgot Password Form -->
+    <div class="container" id="forgot-password-container">
+        <h2>Forgot Password</h2>
+        <form id="forgot-password-form">
+            <input type="email" class="input-field" placeholder="Enter your email" required>
+            <button type="submit" class="btn" onclick="resetPassword(event)">Reset Password</button>
+        </form>
+        <div class="link">
+            <a href="javascript:void(0);" onclick="showLogin()">Back to Login</a>
+        </div>
+    </div>
+
+    <!-- Registration Form -->
+    <div class="container" id="register-container" style="display: none;">
+        <h2>Register</h2>
+        <form id="register-form">
+            <input type="text" class="input-field" placeholder="Name" required>
+            <input type="email" class="input-field" placeholder="Email" required>
+            <input type="text" class="input-field" placeholder="Phone Number" required>
+            <select class="input-field" required>
+                <option value="+1">+1 (USA)</option>
+                <option value="+44">+44 (UK)</option>
+                <option value="+91">+91 (India)</option>
+            </select>
+            <input type="password" class="input-field" placeholder="Password" required>
+            <input type="text" class="input-field" placeholder="Referral Code (optional)">
+            <button type="submit" class="btn">Register</button>
+        </form>
+        <div class="link">
+            <a href="javascript:void(0);" onclick="showLogin()">Already have an account? Login here</a>
+        </div>
+    </div>
+
+    <!-- Home Page -->
+    <div class="home-container section" id="home-container">
+        <h2>Welcome to EarnEasy!</h2>
+        <p>You are now logged in. Start earning by referring others!</p>
+        <button class="btn" onclick="showInvite()">Get Started</button>
+    </div>
+
+    <!-- Invite Page -->
+    <div class="home-container section" id="invite-container">
+        <h2>Your Referral Link</h2>
+        <p>Share this link with your friends and start earning: <br>
+            <a href="#">https://yoursite.com/referral?code=USER123</a>
+        </p>
+    </div>
+
+    <!-- Leaderboard Page -->
+    <div class="home-container section" id="leaderboard-container">
+        <h2>Leaderboard</h2>
+        <table>
+            <tr>
+                <th>Rank</th>
+                <th>User</th>
+                <th>Referrals</th>
+                <th>Rewards</th>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>John Doe</td>
+                <td>100</td>
+                <td>$500.00</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Jane Smith</td>
+                <td>85</td>
+                <td>$400.00</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- User Profile Page -->
+    <div class="home-container section" id="me-container">
+        <h2>Your Profile</h2>
+        <p>Name: John Doe</p>
+        <p>Balance: $150.00</p>
+        <button class="btn" onclick="logout()">Logout</button>
+    </div>
+
+    <!-- Bottom Bar -->
+    <div id="bottom-bar">
+        <button class="bottom-btn" onclick="showHome()">Home</button>
+        <button class="bottom-btn" onclick="showInvite()">Invite</button>
+        <button class="bottom-btn" onclick="showLeaderboard()">Leaderboard</button>
+        <button class="bottom-btn" onclick="showMe()">Me</button>
+    </div>
+
+    <!-- Floating Action Button -->
+    <button class="fab" onclick="alert('Help/Support Section')">?</button>
+
+    <script>
+        // Show login and registration forms
+        function showRegistration() {
+            document.getElementById('login-container').style.display = 'none';
+            document.getElementById('register-container').style.display = 'block';
+        }
+
+        function showLogin() {
+            document.getElementById('register-container').style.display = 'none';
+            document.getElementById('forgot-password-container').style.display = 'none';
+            document.getElementById('login-container').style.display = 'block';
+        }
+
+        function showForgotPassword() {
+            document.getElementById('login-container').style.display = 'none';
+            document.getElementById('forgot-password-container').style.display = 'block';
+        }
+
+        // Forgot password reset simulation
+        function resetPassword(event) {
+            event.preventDefault();
+            alert('Password reset instructions have been sent to your email!');
+            showLogin();
+        }
+
+        // Show different sections
+        function showHome() {
+            document.getElementById('home-container').style.display = 'block';
+            document.getElementById('invite-container').style.display = 'none';
+            document.getElementById('leaderboard-container').style.display = 'none';
+            document.getElementById('me-container').style.display = 'none';
+        }
+
+        function showInvite() {
+            document.getElementById('home-container').style.display = 'none';
+            document.getElementById('invite-container').style.display = 'block';
+            document.getElementById('leaderboard-container').style.display = 'none';
+            document.getElementById('me-container').style.display = 'none';
+        }
+
+        function showLeaderboard() {
+            document.getElementById('home-container').style.display = 'none';
+            document.getElementById('invite-container').style.display = 'none';
+            document.getElementById('leaderboard-container').style.display = 'block';
+            document.getElementById('me-container').style.display = 'none';
+        }
+
+        function showMe() {
+            document.getElementById('home-container').style.display = 'none';
+            document.getElementById('invite-container').style.display = 'none';
+            document.getElementById('leaderboard-container').style.display = 'none';
+            document.getElementById('me-container').style.display = 'block';
+        }
+
+        // Login and logout
+        function login(event) {
+            event.preventDefault(); // Prevent form submission
+            alert('Logged in successfully!');
+            document.getElementById('login-container').style.display = 'none';
+            document.getElementById('bottom-bar').style.display = 'flex';
+            document.getElementById('home-container').style.display = 'block';
+        }
+
+        function logout() {
+            alert('Logged out successfully!');
+            document.getElementById('home-container').style.display = 'none';
+            document.getElementById('bottom-bar').style.display = 'none';
+            document.getElementById('login-container').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
